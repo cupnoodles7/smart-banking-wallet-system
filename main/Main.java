@@ -1,11 +1,38 @@
 package main;
 
-import model.Customer;
+import wallet.*;
+import exception.*;
 
 public class Main {
+
     public static void main(String[] args) {
-        System.out.println("Smart Banking Wallet System - skeleton structure created");
-        Customer c = new Customer("c1", "Alice", "alice@example.com");
-        System.out.println(c);
+
+        PaytmWallet paytm = new PaytmWallet(10000);
+        PhonePeWallet phonepe = new PhonePeWallet(5000);
+
+        try {
+
+            paytm.addMoney(2000);
+
+            paytm.payBill(3000);
+
+            paytm.transferToWallet(4000, phonepe);
+
+            paytm.displayBalance();
+            phonepe.displayBalance();
+
+        }
+        catch (WalletLimitExceededException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (InsufficientBalanceException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (InvalidAmountException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            System.out.println("Wallet operation completed");
+        }
     }
 }
