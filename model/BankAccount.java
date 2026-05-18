@@ -8,7 +8,7 @@ import util.FileLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BankAccount {
+public abstract class BankAccount implements Cloneable {
 
     protected String accountNumber;
     protected Customer customer;
@@ -27,6 +27,10 @@ public abstract class BankAccount {
         this.customer = customer;
         this.balance = balance;
     }
+
+    public String getAccountNumber() { return accountNumber; }
+    public Customer getCustomer()    { return customer; }
+    public double getBalance()       { return balance; }
 
     private String generateTransactionId() {
 
@@ -51,23 +55,15 @@ public abstract class BankAccount {
             );
         }
 
+        Transaction transaction =
+                new Transaction(
+                        generateTransactionId(),
+                        amount,
+                        "DEPOSIT"
+                );
+
         balance += amount;
-
-        try {
-
-            Transaction transaction =
-                    new Transaction(
-                            generateTransactionId(),
-                            amount,
-                            "DEPOSIT"
-                    );
-
-            transactions.add(transaction);
-
-        } catch (InvalidAmountException e) {
-
-            FileLogger.logError(e.getMessage());
-        }
+        transactions.add(transaction);
 
         System.out.println(
                 "Deposit successful. Updated Balance: ₹"
@@ -105,23 +101,15 @@ public abstract class BankAccount {
             );
         }
 
+        Transaction transaction =
+                new Transaction(
+                        generateTransactionId(),
+                        amount,
+                        "WITHDRAW"
+                );
+
         balance -= amount;
-
-        try {
-
-            Transaction transaction =
-                    new Transaction(
-                            generateTransactionId(),
-                            amount,
-                            "WITHDRAW"
-                    );
-
-            transactions.add(transaction);
-
-        } catch (InvalidAmountException e) {
-
-            FileLogger.logError(e.getMessage());
-        }
+        transactions.add(transaction);
 
         System.out.println(
                 "Withdrawal successful. Remaining Balance: ₹"
@@ -166,34 +154,25 @@ public abstract class BankAccount {
             );
         }
 
-        this.balance -= amount;
+        Transaction senderTransaction =
+                new Transaction(
+                        generateTransactionId(),
+                        amount,
+                        "TRANSFER SENT"
+                );
 
+        Transaction receiverTransaction =
+                new Transaction(
+                        generateTransactionId(),
+                        amount,
+                        "TRANSFER RECEIVED"
+                );
+
+        this.balance -= amount;
         receiver.balance += amount;
 
-        try {
-
-            Transaction senderTransaction =
-                    new Transaction(
-                            generateTransactionId(),
-                            amount,
-                            "TRANSFER SENT"
-                    );
-
-            Transaction receiverTransaction =
-                    new Transaction(
-                            generateTransactionId(),
-                            amount,
-                            "TRANSFER RECEIVED"
-                    );
-
-            transactions.add(senderTransaction);
-
-            receiver.transactions.add(receiverTransaction);
-
-        } catch (InvalidAmountException e) {
-
-            FileLogger.logError(e.getMessage());
-        }
+        transactions.add(senderTransaction);
+        receiver.transactions.add(receiverTransaction);
 
         System.out.println(
                 "Transfer successful."
@@ -223,6 +202,21 @@ public abstract class BankAccount {
 
             System.out.println(transaction);
         }
+    }
+
+    // =========================
+    // CLONING
+    // =========================
+
+    // Deep copy: clone the mutable Customer reference and create a fresh
+    // transactions list, otherwise modifying the clone leaks back to the original.
+    @Override
+    public BankAccount clone() throws CloneNotSupportedException {
+
+        BankAccount cloned = (BankAccount) super.clone();
+        cloned.customer = this.customer.clone();
+        cloned.transactions = new ArrayList<>(this.transactions);
+        return cloned;
     }
 
     // =========================

@@ -6,6 +6,7 @@ public class PhonePeWallet implements WalletOperations {
 
     private double balance;
     private final double MAX_LIMIT = 50000;
+    private final double DAILY_TRANSFER_LIMIT = 20000;
 
     public PhonePeWallet(double balance) {
         this.balance = balance;
@@ -57,6 +58,16 @@ public class PhonePeWallet implements WalletOperations {
             throws InsufficientBalanceException,
                    WalletLimitExceededException,
                    InvalidAmountException {
+
+        if (amount <= 0) {
+            throw new InvalidAmountException(
+                    "Transfer amount must be positive");
+        }
+
+        if (amount > DAILY_TRANSFER_LIMIT) {
+            throw new WalletLimitExceededException(
+                    "Daily transfer limit exceeded");
+        }
 
         if (amount > balance) {
             throw new InsufficientBalanceException(
