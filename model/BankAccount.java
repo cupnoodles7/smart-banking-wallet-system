@@ -38,8 +38,8 @@ public abstract class BankAccount implements Cloneable {
         return "TXN" + (++transactionCounter);
     }
 
-   
-
+    
+    // DEPOSIT
     public void deposit(double amount)
             throws InvalidAmountException {
 
@@ -61,10 +61,7 @@ public abstract class BankAccount implements Cloneable {
         );
     }
 
-    // =========================
     // WITHDRAW
-    // =========================
-
     public void withdraw(double amount)
             throws InvalidAmountException,
                    InsufficientBalanceException {
@@ -88,7 +85,8 @@ public abstract class BankAccount implements Cloneable {
         );
     }
 
-
+   
+    // TRANSFER
 
     public void transfer(BankAccount receiver,
                          double amount)
@@ -135,7 +133,8 @@ public abstract class BankAccount implements Cloneable {
         System.out.println("Transfer successful.");
     }
 
-
+  
+    // VIEW TRANSACTIONS
 
     public void viewTransactions() {
 
@@ -151,7 +150,10 @@ public abstract class BankAccount implements Cloneable {
         }
     }
 
-  
+
+    // CLONING
+    // Deep copy: clone the mutable Customer reference and create a fresh
+    // transactions list, otherwise modifying the clone leaks back to the original.
     @Override
     public BankAccount clone() throws CloneNotSupportedException {
 
@@ -161,6 +163,15 @@ public abstract class BankAccount implements Cloneable {
         return cloned;
     }
 
-    // Each subclass renders its own header line (Savings vs Current).
-    public abstract void displayDetails();
+    // DISPLAY DETAILS
+    public void displayDetails() {
+        System.out.println();
+        System.out.println("ACCOUNT DETAILS");
+        System.out.println(getAccountType());
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Balance: ₹" + balance);
+}
+
+    // Subclasses provide only the account type
+    protected abstract String getAccountType();
 }

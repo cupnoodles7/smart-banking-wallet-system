@@ -11,18 +11,7 @@ public class SavingsAccount extends BankAccount {
     }
 
     @Override
-    public void displayDetails() {
-
-        System.out.println("Savings Account");
-
-        System.out.println(
-                "Account Number: "
-                        + accountNumber
-        );
-
-        System.out.println(
-                "Balance: ₹"
-                        + balance
-        );
+    protected String getAccountType() {
+        return "Savings Account";
     }
 }
