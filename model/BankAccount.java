@@ -37,10 +37,8 @@ public abstract class BankAccount implements Cloneable {
         return "TXN" + (++transactionCounter);
     }
 
-    // =========================
+    
     // DEPOSIT
-    // =========================
-
     public void deposit(double amount)
             throws InvalidAmountException {
 
@@ -71,10 +69,7 @@ public abstract class BankAccount implements Cloneable {
         );
     }
 
-    // =========================
     // WITHDRAW
-    // =========================
-
     public void withdraw(double amount)
             throws InvalidAmountException,
             InsufficientBalanceException {
@@ -117,9 +112,8 @@ public abstract class BankAccount implements Cloneable {
         );
     }
 
-    // =========================
+   
     // TRANSFER
-    // =========================
 
     public void transfer(BankAccount receiver,
                          double amount)
@@ -179,9 +173,8 @@ public abstract class BankAccount implements Cloneable {
         );
     }
 
-    // =========================
+  
     // VIEW TRANSACTIONS
-    // =========================
 
     public void viewTransactions() {
 
@@ -204,10 +197,8 @@ public abstract class BankAccount implements Cloneable {
         }
     }
 
-    // =========================
-    // CLONING
-    // =========================
 
+    // CLONING
     // Deep copy: clone the mutable Customer reference and create a fresh
     // transactions list, otherwise modifying the clone leaks back to the original.
     @Override
@@ -219,9 +210,15 @@ public abstract class BankAccount implements Cloneable {
         return cloned;
     }
 
-    // =========================
     // DISPLAY DETAILS
-    // =========================
+    public void displayDetails() {
+        System.out.println();
+        System.out.println("ACCOUNT DETAILS");
+        System.out.println(getAccountType());
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Balance: ₹" + balance);
+}
 
-    public abstract void displayDetails();
+    // Subclasses provide only the account type
+    protected abstract String getAccountType();
 }

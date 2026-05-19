@@ -10,18 +10,7 @@ public class CurrentAccount extends BankAccount {
     }
 
     @Override
-    public void displayDetails() {
-
-        System.out.println("Current Account");
-
-        System.out.println(
-                "Account Number: "
-                        + accountNumber
-        );
-
-        System.out.println(
-                "Balance: ₹"
-                        + balance
-        );
-    }
+    protected String getAccountType() {
+        return "Current Account";
+}
 }
