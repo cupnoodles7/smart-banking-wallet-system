@@ -100,57 +100,6 @@ This project simulates a Smart Banking & Digital Wallet platform that supports:
 
 ---
 
-# Project Structure
-
-```text
-smart-banking-wallet-system/
-│
-├── exception/
-│   ├── DuplicateCustomerException.java
-│   ├── InsufficientBalanceException.java
-│   ├── InvalidAmountException.java
-│   ├── InvalidEmailException.java
-│   ├── InvalidPhoneNumberException.java
-│   └── WalletLimitExceededException.java
-│
-├── main/
-│   ├── BankingController.java
-│   ├── GlobalExceptionHandler.java
-│   ├── InputHandler.java
-│   ├── Main.java
-│   └── MenuController.java
-│
-├── model/
-│   ├── BankAccount.java
-│   ├── CurrentAccount.java
-│   ├── Customer.java
-│   ├── SavingsAccount.java
-│   └── Transaction.java
-│
-├── service/
-│   ├── BankingService.java
-│   ├── CustomerService.java
-│   └── WalletService.java
-│
-├── util/
-│   ├── CustomerValidator.java
-│   └── FileLogger.java
-│
-├── wallet/
-│   ├── AbstractWallet.java
-│   ├── PaytmWallet.java
-│   ├── PhonePeWallet.java
-│   └── WalletOperations.java
-│
-├── .gitignore
-└── README.md
-```
-
----
-
-
----
-
 # Wallet Module Design
 
 To avoid duplicate code between wallet implementations, a common abstract class `AbstractWallet` was introduced.
@@ -161,11 +110,6 @@ To avoid duplicate code between wallet implementations, a common abstract class 
 - Improves maintainability
 - Promotes code reusability
 - Supports future wallet extensions
-
-Example future extensions:
-
-- GooglePayWallet
-- AmazonPayWallet
 
 ---
 
@@ -191,52 +135,22 @@ Example future extensions:
 
 ---
 
-# How to Run
+# Quick Start
 
-## Compile Project
+### 1. Clean previous build
 
 ```bash
-javac */*.java
+rm -rf bin
 ```
 
-## Run Application
+### 2. Compile
 
-java main.Main
+```bash
+javac -d bin exception/*.java model/*.java util/*.java wallet/*.java service/*.java main/*.java
+```
 
+### 3. Run
 
----
-
-# Sample Error Logs
-
-[ERROR] Invalid deposit amount
-[ERROR] Insufficient balance during transfer
-[ERROR] Wallet limit exceeded
-
----
-
-# Git Workflow
-
-- Feature branch development
-- Pull Request based integration
-- Team collaboration using GitHub
-
----
-
-# Future Enhancements
-
-- Database Integration
-- GUI Application
-- Spring Boot APIs
-- Authentication & Authorization
-- Online Banking Support
-
----
-
-# Contributors
-
-- Akriti Kheta
-- A Sree Vaishnavi
-- Kashish Prasad
-- Haripriyaa G B
-
-Developed as part of a Java OOP & Exception Handling Case Study Project.
+```bash
+java -cp bin main.Main
+```
