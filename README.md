@@ -102,7 +102,7 @@ This project simulates a Smart Banking & Digital Wallet platform that supports:
 
 # Project Structure
 
-
+```text
 smart-banking-wallet-system/
 │
 ├── exception/
@@ -145,6 +145,9 @@ smart-banking-wallet-system/
 ├── .gitignore
 └── README.md
 ```
+
+---
+
 
 ---
 
