@@ -1,5 +1,6 @@
 package model;
 
+// Concrete account type. Inherits all deposit/withdraw/transfer logic from BankAccount
 public class SavingsAccount extends BankAccount {
 
     public SavingsAccount(String accountNumber,

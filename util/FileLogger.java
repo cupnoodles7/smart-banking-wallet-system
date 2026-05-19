@@ -19,6 +19,8 @@ public class FileLogger {
 
         } catch (IOException e) {
 
+            // Logger can't crash the app: fall back to stderr so the
+            // failure is still visible to the developer.
             System.out.println(
                     "Failed to write log: " + e.getMessage()
             );

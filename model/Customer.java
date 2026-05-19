@@ -16,9 +16,7 @@ public class Customer implements Cloneable {
 
     @Override
     public Customer clone() throws CloneNotSupportedException {
-        // String fields are immutable, so field-by-field copy is safe.
-        // If mutable fields (e.g. Address object) are added later,
-        // clone them explicitly here — that is the deep-copy contract.
+        // Since all fields are either immutable (String) or primitive, the default shallow copy is used
         return (Customer) super.clone();
     }
 

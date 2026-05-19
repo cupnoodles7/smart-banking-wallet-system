@@ -1,5 +1,6 @@
 package model;
 
+
 public class CurrentAccount extends BankAccount {
 
     public CurrentAccount(String accountNumber,

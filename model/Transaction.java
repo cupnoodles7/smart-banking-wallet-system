@@ -1,8 +1,8 @@
 package model;
 
 import exception.InvalidAmountException;
-
 import java.time.LocalDateTime;
+import util.AmountValidator;
 
 public class Transaction {
 
@@ -16,11 +16,7 @@ public class Transaction {
                        String type)
             throws InvalidAmountException {
 
-        if (amount <= 0) {
-            throw new InvalidAmountException(
-                    "Transaction amount must be greater than zero"
-            );
-        }
+        AmountValidator.requirePositive(amount, "Transaction");
 
         this.transactionId = transactionId;
         this.amount = amount;

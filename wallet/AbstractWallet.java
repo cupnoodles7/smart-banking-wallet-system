@@ -1,14 +1,18 @@
 package wallet;
 
 import exception.*;
+import util.AmountValidator;
 
+// Template-method parent for all wallet providers
 public abstract class AbstractWallet
         implements WalletOperations {
 
     protected double balance;
 
+    // Hard ceiling on stored balance, checked on every top-up.
     protected final double MAX_LIMIT = 50000;
 
+    // Per-transfer cap (acts as a stand-in for a real daily aggregate).
     protected final double DAILY_TRANSFER_LIMIT = 20000;
 
     public AbstractWallet(double balance) {
@@ -20,15 +24,9 @@ public abstract class AbstractWallet
             throws WalletLimitExceededException,
                    InvalidAmountException {
 
-        if (amount <= 0) {
-
-            throw new InvalidAmountException(
-                    "Amount must be positive"
-            );
-        }
+        AmountValidator.requirePositive(amount, "Top-up");
 
         if (balance + amount > MAX_LIMIT) {
-
             throw new WalletLimitExceededException(
                     "Wallet limit exceeded"
             );
@@ -44,19 +42,8 @@ public abstract class AbstractWallet
             throws InsufficientBalanceException,
                    InvalidAmountException {
 
-        if (amount <= 0) {
-
-            throw new InvalidAmountException(
-                    "Invalid amount"
-            );
-        }
-
-        if (amount > balance) {
-
-            throw new InsufficientBalanceException(
-                    "Insufficient balance"
-            );
-        }
+        AmountValidator.requirePositive(amount, "Bill");
+        AmountValidator.requireSufficient(balance, amount);
 
         balance -= amount;
 
@@ -72,36 +59,28 @@ public abstract class AbstractWallet
                    WalletLimitExceededException,
                    InvalidAmountException {
 
-        if (amount <= 0) {
+        AmountValidator.requirePositive(amount, "Transfer");
 
-            throw new InvalidAmountException(
-                    "Transfer amount invalid"
-            );
-        }
-
+        // Daily cap is wallet-specific (not just "positive amount"), so it
+        // stays inline rather than moving to AmountValidator.
         if (amount > DAILY_TRANSFER_LIMIT) {
-
             throw new WalletLimitExceededException(
                     "Daily transfer limit exceeded"
             );
         }
 
-        if (amount > balance) {
-
-            throw new InsufficientBalanceException(
-                    "Low balance"
-            );
-        }
+        AmountValidator.requireSufficient(balance, amount);
 
         balance -= amount;
 
+        // Destination's addMoney re-validates its own MAX_LIMIT, so we
+        // don't need to check it here.
         wallet.addMoney(amount);
 
         System.out.println("Transfer successful");
     }
 
     public void displayBalance() {
-
         System.out.println(
                 "Wallet Balance: ₹" + balance
         );

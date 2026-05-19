@@ -8,3 +8,5 @@ bin/
 *.class
 error.log
 >>>>>>> bafe6e8cf3ad57a0c41f0551fae19cdc0be94924
+
+REPO_DOCUMENTATION.md

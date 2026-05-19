@@ -3,6 +3,7 @@ package main;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+// a single Scanner instance is shared and closed exactly once
 public class InputHandler {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -26,6 +27,7 @@ public class InputHandler {
 
         } catch (InputMismatchException e) {
 
+        
             scanner.nextLine();
             throw new IllegalArgumentException(
                     "Expected a whole number"

@@ -2,16 +2,15 @@ package service;
 
 import exception.InsufficientBalanceException;
 import exception.InvalidAmountException;
-
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import model.BankAccount;
 import model.CurrentAccount;
 import model.Customer;
 import model.SavingsAccount;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+//Keeps the account-number → BankAccount mapping and exposes operations
 public class BankingService {
 
     private final Map<String, BankAccount> accountRegistry = new LinkedHashMap<>();

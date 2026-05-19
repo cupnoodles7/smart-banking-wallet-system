@@ -9,11 +9,11 @@ import java.util.Map;
 import model.Customer;
 import util.CustomerValidator;
 
+// In-memory customer store and related operations
 public class CustomerService {
 
     private final Map<String, Customer> customerRegistry = new LinkedHashMap<>();
 
-   
     public Customer createCustomer(String customerId,
                                    String name,
                                    String email,

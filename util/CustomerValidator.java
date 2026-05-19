@@ -1,10 +1,9 @@
-
-
 package util;
 
 import exception.InvalidEmailException;
 import exception.InvalidPhoneNumberException;
 
+// validation used by CustomerService on creation
 public class CustomerValidator {
     private static final int    PHONE_LENGTH   = 10;
     private static final String PHONE_PATTERN  = "\\d{" + PHONE_LENGTH + "}";

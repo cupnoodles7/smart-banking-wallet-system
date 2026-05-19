@@ -1,22 +1,24 @@
 package model;
 
-import exception.InvalidAmountException;
 import exception.InsufficientBalanceException;
-
-import util.FileLogger;
-
+import exception.InvalidAmountException;
 import java.util.ArrayList;
 import java.util.List;
+import util.AmountValidator;
 
+// Abstract base for all bank accounts. Holds the balance + transaction history
+// and implements deposit / withdraw / transfer once so subclasses only
+// customize the display format. Implements Cloneable for the deep-copy demo
 public abstract class BankAccount implements Cloneable {
 
     protected String accountNumber;
     protected Customer customer;
     protected double balance;
 
-    protected List<Transaction> transactions =
-            new ArrayList<>();
+    protected List<Transaction> transactions = new ArrayList<>();
 
+    // Static so all accounts share one monotonically-increasing ID sequence.
+    // Safe only because this app is single-threaded.
     private static int transactionCounter = 100;
 
     public BankAccount(String accountNumber,
@@ -33,27 +35,15 @@ public abstract class BankAccount implements Cloneable {
     public double getBalance()       { return balance; }
 
     private String generateTransactionId() {
-
         return "TXN" + (++transactionCounter);
     }
 
-    // =========================
-    // DEPOSIT
-    // =========================
+   
 
     public void deposit(double amount)
             throws InvalidAmountException {
 
-        if (amount <= 0) {
-
-            FileLogger.logError(
-                    "Invalid deposit amount attempted"
-            );
-
-            throw new InvalidAmountException(
-                    "Deposit amount must be greater than zero"
-            );
-        }
+        AmountValidator.requirePositive(amount, "Deposit");
 
         Transaction transaction =
                 new Transaction(
@@ -77,29 +67,10 @@ public abstract class BankAccount implements Cloneable {
 
     public void withdraw(double amount)
             throws InvalidAmountException,
-            InsufficientBalanceException {
+                   InsufficientBalanceException {
 
-        if (amount <= 0) {
-
-            FileLogger.logError(
-                    "Invalid withdrawal amount attempted"
-            );
-
-            throw new InvalidAmountException(
-                    "Withdrawal amount must be greater than zero"
-            );
-        }
-
-        if (amount > balance) {
-
-            FileLogger.logError(
-                    "Insufficient balance during withdrawal"
-            );
-
-            throw new InsufficientBalanceException(
-                    "Insufficient balance"
-            );
-        }
+        AmountValidator.requirePositive(amount, "Withdrawal");
+        AmountValidator.requireSufficient(balance, amount);
 
         Transaction transaction =
                 new Transaction(
@@ -117,42 +88,29 @@ public abstract class BankAccount implements Cloneable {
         );
     }
 
-    // =========================
-    // TRANSFER
-    // =========================
+
 
     public void transfer(BankAccount receiver,
                          double amount)
             throws InvalidAmountException,
-            InsufficientBalanceException {
+                   InsufficientBalanceException {
 
+        // These two checks are transfer-specific (not amount-related), so
+        // they stay inline rather than moving to AmountValidator.
         if (receiver == null) {
-
             throw new NullPointerException(
                     "Receiver account cannot be null"
             );
         }
 
         if (this == receiver) {
-
             throw new IllegalArgumentException(
                     "Sender and receiver cannot be same account"
             );
         }
 
-        if (amount <= 0) {
-
-            throw new InvalidAmountException(
-                    "Transfer amount must be greater than zero"
-            );
-        }
-
-        if (amount > balance) {
-
-            throw new InsufficientBalanceException(
-                    "Insufficient balance for transfer"
-            );
-        }
+        AmountValidator.requirePositive(amount, "Transfer");
+        AmountValidator.requireSufficient(balance, amount);
 
         Transaction senderTransaction =
                 new Transaction(
@@ -174,42 +132,26 @@ public abstract class BankAccount implements Cloneable {
         transactions.add(senderTransaction);
         receiver.transactions.add(receiverTransaction);
 
-        System.out.println(
-                "Transfer successful."
-        );
+        System.out.println("Transfer successful.");
     }
 
-    // =========================
-    // VIEW TRANSACTIONS
-    // =========================
+
 
     public void viewTransactions() {
 
         if (transactions.isEmpty()) {
-
-            System.out.println(
-                    "No transactions available."
-            );
-
+            System.out.println("No transactions available.");
             return;
         }
 
-        System.out.println(
-                "\nTransaction History:"
-        );
+        System.out.println("\nTransaction History:");
 
         for (Transaction transaction : transactions) {
-
             System.out.println(transaction);
         }
     }
 
-    // =========================
-    // CLONING
-    // =========================
-
-    // Deep copy: clone the mutable Customer reference and create a fresh
-    // transactions list, otherwise modifying the clone leaks back to the original.
+  
     @Override
     public BankAccount clone() throws CloneNotSupportedException {
 
@@ -219,9 +161,6 @@ public abstract class BankAccount implements Cloneable {
         return cloned;
     }
 
-    // =========================
-    // DISPLAY DETAILS
-    // =========================
-
+    // Each subclass renders its own header line (Savings vs Current).
     public abstract void displayDetails();
 }

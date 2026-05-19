@@ -1,5 +1,6 @@
 package wallet;
 
+// Marker subclass
 public class PhonePeWallet
         extends AbstractWallet {
 
