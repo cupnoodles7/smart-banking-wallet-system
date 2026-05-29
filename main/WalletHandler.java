@@ -34,7 +34,10 @@ public class WalletHandler {
         String type = input.readLine("Wallet type (PAYTM/PHONEPE): ");
         WalletOperations wallet = walletService.linkWallet(customerId, type);
 
-        System.out.println("1. Add Money  2. Pay Bill  3. Transfer To Wallet");
+        System.out.println("1. Add Money");
+        System.out.println("2. Pay Bill");
+        System.out.println("3. Transfer To Wallet");
+        System.out.println("4. View Wallet Transactions");
         int op = input.readInt("Choose operation: ");
 
         switch (op) {
@@ -53,6 +56,9 @@ public class WalletHandler {
                 WalletOperations destWallet = walletService.findWallet(destCustomerId, destType);
                 double amount = input.readDouble("Amount: ");
                 wallet.transferToWallet(amount, destWallet);
+            }
+            case 4 -> {
+            	((wallet.AbstractWallet) wallet).viewWalletTransactions();
             }
             default -> System.out.println("Invalid wallet operation.");
         }

@@ -1,22 +1,27 @@
 package main;
 
-import util.FileLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-// One place to format + log any exception that escapes a handler
+// One place to format + log exceptions
 public class GlobalExceptionHandler {
+
+    // Logger object
+    private static final Logger logger =
+            LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     public static void handle(Exception e) {
 
-        // Console: short, user-facing message.
+        // User-friendly console message
         System.out.println(
                 "ERROR: " + e.getMessage()
         );
 
-        // File: exception class + message, so error.log shows the type too.
-        FileLogger.logError(
-                e.getClass().getSimpleName()
-                + " - "
-                + e.getMessage()
+        // Professional logging
+        logger.error(
+                "Exception occurred: {} - {}",
+                e.getClass().getSimpleName(),
+                e.getMessage()
         );
     }
 }
