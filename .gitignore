@@ -1,12 +1,20 @@
-<<<<<<< HEAD
-*.class
-=======
+# Maven build output
+target/
+
+# Eclipse
 .classpath
 .project
 .settings/
 bin/
+
+# Compiled class files
 *.class
+
+# Logs
 error.log
->>>>>>> bafe6e8cf3ad57a0c41f0551fae19cdc0be94924
+*.log
+
+# OS
+.DS_Store
 
 REPO_DOCUMENTATION.md
