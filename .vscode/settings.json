@@ -1,0 +1,11 @@
+{
+    "java.project.sourcePaths": [
+        "."
+    ],
+    "java.project.referencedLibraries": [
+        "/Users/kashish.prasad/Desktop/jars/logback-classic-1.5.6.jar",
+        "/Users/kashish.prasad/Desktop/jars/logback-core-1.5.6.jar",
+        "/Users/kashish.prasad/Downloads/slf4j-api-2.0.13.jar"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
+}
